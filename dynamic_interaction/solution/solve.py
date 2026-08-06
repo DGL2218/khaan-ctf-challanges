@@ -37,11 +37,11 @@ def main():
     
     print(f"[*] Calculating Fibonacci({n}) mod 10^9...")
     ans = fibonacci_modulo(n)
-    print(f"[+] Sending answer: {ans}")
+    # Record stage 2 start time right before we send the answer and prompt server to start Stage 2
+    stage2_start = time.time()
     s.sendall(f"{ans}\n".encode())
     
     # Read Stage 1 result and Stage 2 prompt
-    time.sleep(0.1)
     stage2_prompt = s.recv(1024).decode()
     print(stage2_prompt)
     
@@ -50,8 +50,13 @@ def main():
         return
         
     # --- Stage 2: Timing ---
-    print("[*] Timing Gate: Waiting exactly 1.5 seconds to send the knock...")
-    time.sleep(1.50)
+    # Enforce exactly 1.5s after server started timing
+    prompt_latency = time.time() - stage2_start
+    sleep_time = 1.50 - prompt_latency
+    if sleep_time < 0:
+        sleep_time = 0
+    print(f"[*] Timing Gate: Received prompt in {prompt_latency:.3f}s. Sleeping for {sleep_time:.3f}s...")
+    time.sleep(sleep_time)
     s.sendall(b"VTCH_OPEN\n")
     
     # Read Stage 2 result and Stage 3 prompt
