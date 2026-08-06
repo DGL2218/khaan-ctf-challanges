@@ -98,4 +98,4 @@ def settle():
 
 if __name__ == '__main__':
     # Run the server
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5001)

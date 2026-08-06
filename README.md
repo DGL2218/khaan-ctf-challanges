@@ -68,5 +68,5 @@ These challenges require hosting a server or Docker container. Players will conn
      python server.py
      ```
      *(Alternatively, write a simple Dockerfile for server.py to containerize it).*
-  2. The API is hosted on port `5000`. Provide players with the endpoint: `http://<your-server-ip>:5000/settle`.
+  2. The API is hosted on port `5001`. Provide players with the endpoint: `http://<your-server-ip>:5001/settle`.
   3. Provide players with the binary `tokengen` (if distributing) or describe the hashing rules so they can write their own forged signature generators.

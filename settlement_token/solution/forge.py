@@ -6,7 +6,7 @@ import sys
 import os
 
 # Server endpoint
-SERVER_URL = "http://100.91.148.10:5000/settle"
+SERVER_URL = "http://100.91.148.10:5001/settle"
 
 # Step 1: Reconstruct the split key
 KEYA = b"MoviPayMasterKey"

@@ -6,6 +6,6 @@ RUN pip install --no-cache-dir flask
 
 COPY server.py /app/server.py
 
-EXPOSE 5000
+EXPOSE 5001
 
 CMD ["python", "server.py"]
