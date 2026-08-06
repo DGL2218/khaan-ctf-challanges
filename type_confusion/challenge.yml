@@ -11,7 +11,7 @@ value: 500
 type: standard
 
 flags:
-  - test{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}
+  - VTCH{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}
 
 tags:
   - web

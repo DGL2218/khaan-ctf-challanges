@@ -6,7 +6,7 @@
 - **Category**: Web / Logic Vulnerability
 - **Classification**: Type Confusion (Numerical Type Mismatch · Accumulated Rounding)
 - **Difficulty**: Medium
-- **Flag**: `test{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}`
+- **Flag**: `VTCH{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}`
 
 ---
 
@@ -43,7 +43,7 @@ There are two primary methods to deploy this challenge on CTFd:
      http://<YOUR_SERVER_IP>:5000
      ```
    - **Value**: 500
-   - **Flag**: `test{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}`
+   - **Flag**: `VTCH{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}`
    - Click **Create Challenge** and set state to **Visible**.
 
 ---
@@ -98,4 +98,4 @@ Notice:
 ```bash
 python solver.py http://127.0.0.1:5000
 ```
-Output: `🎉 FLAG CAPTURED: test{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}`
+Output: `🎉 FLAG CAPTURED: VTCH{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}`

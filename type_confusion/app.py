@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, jsonify, session
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "ctf_super_secret_key_2026")
 
-FLAG = os.environ.get("FLAG", "test{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}")
+FLAG = os.environ.get("FLAG", "VTCH{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}")
 
 # Base exchange rates relative to USD (1 USD = X Currency)
 RATES = {

@@ -79,4 +79,4 @@ We craft a POST request payload containing the parameter overrides:
 ```
 
 By computing the MAC for `payType=COMP` (internally mapped to `2`) and `cbsn=0000` (internally `0`), we bypass the terminal restriction and query the CSMS server directly. The server validates the signature, notices the free settlement flags, and awards the flag:
-`MoviPay{c4n0n1c4l_HMAC_f0rg3d_v1a_spl1t_k3y}`
+`VTCH{c4n0n1c4l_HMAC_f0rg3d_v1a_spl1t_k3y}`

@@ -8,7 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 ENV PORT=5000
-ENV FLAG="test{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}"
+ENV FLAG="VTCH{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}"
 
 EXPOSE 5000
 

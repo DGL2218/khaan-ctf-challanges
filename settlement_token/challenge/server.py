@@ -85,7 +85,7 @@ def settle():
             return jsonify({
                 "status": "success",
                 "message": "Free settlement path authorized!",
-                "flag": "MoviPay{c4n0n1c4l_HMAC_f0rg3d_v1a_spl1t_k3y}"
+                "flag": "VTCH{c4n0n1c4l_HMAC_f0rg3d_v1a_spl1t_k3y}"
             })
         else:
             return jsonify({
