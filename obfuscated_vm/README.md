@@ -1,48 +1,47 @@
-# Obfuscated VM (CTF Reverse Engineering Challenge)
+# CTF Challenge: Obfuscated VM
 
-A medium-difficulty offline Reverse Engineering challenge featuring:
-1. **Control Flow Flattening** to make decompiler output spaghetti-like.
-2. **Mixed Boolean-Arithmetic (MBA)** to disguise basic addition/XOR math.
-3. **Custom Virtual Machine** parsing bytecode for key verification.
-
----
-
-## Repository Structure
-
-```text
-obfuscated_vm/
-├── README.md             # Setup and deployment guide (this file)
-├── challenge/
-│   ├── crackme           # Compiled challenge binary (Distribute to players)
-│   ├── crackme.c         # Source code (DO NOT distribute)
-│   └── build.sh          # Build script (DO NOT distribute)
-└── solution/
-    ├── writeup.md        # Detailed solution walk-through (DO NOT distribute)
-    └── solve.py          # Automatic exploit/solver script (DO NOT distribute)
-```
+## Challenge Details
+- **Name**: Obfuscated VM
+- **Category**: Reverse Engineering
+- **Difficulty**: Medium
+- **Flag**: `VTCH{c0ntr0l_fl0w_fl4tt3n1ng_vm_byp4ss}`
 
 ---
 
-## Setup & Compilation
-
-To build or recompile the challenge binary:
-
-1. Enter the `challenge` directory:
-   ```bash
-   cd challenge/
-   ```
-2. Run the build script (requires `gcc`):
-   ```bash
-   ./build.sh
-   ```
-   This compiles `crackme.c` with optimization flags and strips debugging symbols to make reverse engineering more challenging.
-
----
-
-## Deployment (What to Distribute to Players)
+## Deployment Instructions
 
 This is an **offline reverse engineering** challenge, so no active hosting or servers are required.
 
-To deploy it for your CTF players:
-1. Only distribute the compiled **`crackme`** binary file (located in the `challenge/` folder).
-2. **DO NOT** distribute `crackme.c`, `build.sh`, or any files in the `solution/` folder.
+1. **Compilation**:
+   Compile the binary using the provided build script (requires `gcc`):
+   ```bash
+   cd challenge
+   ./build.sh
+   ```
+2. **Distribution**:
+   Upload only the compiled **`crackme`** binary (located in the `challenge/` folder) to the CTF challenge page.
+3. **Important Security Note**:
+   **DO NOT** distribute `crackme.c`, `build.sh`, or the `solution/` folder containing the solve scripts and writeup.
+
+---
+
+## Solution Walkthrough
+
+The binary validates a 16-character license key. If correct, it decrypts and prints the flag using RC4. To solve it:
+
+1. **Decompile the VM Loop**: 
+   Decompiling the `run_vm()` function in Ghidra or IDA Pro reveals a Control Flow Flattened state machine inside a `while` loop governed by a `switch(state)` statement.
+2. **Reverse the Bitwise Math (MBA)**:
+   Arithmetic operations inside the VM execution states are disguised using Mixed Boolean-Arithmetic:
+   - **XOR**: `(A | B) - (A & B)` is a standard logical XOR.
+   - **ADD**: `(A ^ B) + 2*(A & B)` is simple addition.
+3. **Solve the Rolling Hash**:
+   The validation checks the key characters using a rolling XOR checksum compared to target values after adding `0x57`.
+4. **Key Derivation**:
+   By working backward (subtracting `0x57` from target bytes and XORing adjacent states), we recover the key: `Fl4tt3n_Th3_Fl0w`.
+5. **Execution**:
+   Provide the key to the binary to reveal the flag:
+   ```bash
+   ./crackme Fl4tt3n_Th3_Fl0w
+   ```
+   For the detailed solution writeup, see [writeup.md](solution/writeup.md) and the automated solver in [solve.py](solution/solve.py).

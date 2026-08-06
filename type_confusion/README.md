@@ -1,101 +1,47 @@
-# CTF Challenge: Finmob Currency Exchange (Type Confusion & Accumulated Rounding)
+# CTF Challenge: Type Confusion (Finmob Exchange)
 
 ## Challenge Details
-
-- **Name**: Finmob Currency Exchange
-- **Category**: Web / Logic Vulnerability
-- **Classification**: Type Confusion (Numerical Type Mismatch · Accumulated Rounding)
+- **Name**: Type Confusion (Finmob Exchange)
+- **Category**: Web
 - **Difficulty**: Medium
 - **Flag**: `VTCH{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}`
 
 ---
 
-## Problem Overview
+## Deployment Instructions
 
-Finmob Exchange is a currency trading platform offering multi-currency exchanges (USD, EUR, JPY, MINI). While standard currencies (`USD`, `EUR`, `JPY`) use fixed integer-unit calculations, the `MINI` micro-currency is processed internally using floating-point representation with a ceiling rounding policy (`math.ceil`) when converting back to USD.
+This challenge requires a hosted web portal running inside a Docker container.
 
-Due to this type mismatch, fractional cents resulting from small micro-exchanges are always rounded **up** to the nearest whole cent ($0.01) in favor of the trader. Repeated high-frequency round-trip exchanges (`USD` -> `MINI` -> `USD`) accumulate minute rounding profits, allowing participants to inflate their USD balance infinitely ("Salami Slicing Attack").
-
----
-
-## Deploying to CTFd
-
-There are two primary methods to deploy this challenge on CTFd:
-
-### Method 1: Manual Deployment (Web GUI)
-
-1. **Host the Challenge Container**:
-   Deploy the Docker image on your server or VPS:
+1. **Start the Web App**:
+   Spin up the Docker container (starts on port `5000`):
    ```bash
-   docker build -t finmob-exchange .
-   docker run -d -p 5000:5000 --name finmob-exchange finmob-exchange
+   docker-compose up -d --build
    ```
-2. **Create Challenge in CTFd Admin Panel**:
-   - Go to `CTFd Admin` -> `Challenges` -> `Create Challenge`.
-   - Select **Standard** category.
-   - **Name**: Finmob Exchange
-   - **Category**: Web
-   - **Message / Description**:
-     ```markdown
-     Welcome to Finmob Exchange! Trade assets across global currencies.
-     High-volume traders who reach $500.00 USD can claim the vault flag.
-
-     http://<YOUR_SERVER_IP>:5000
-     ```
-   - **Value**: 500
-   - **Flag**: `VTCH{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}`
-   - Click **Create Challenge** and set state to **Visible**.
+2. **Accessing the Portal**:
+   Expose port `5000` to the internet and provide players with the connection URL: `http://<your-server-ip>:5000`.
+3. **Important Security Note**:
+   **DO NOT** distribute `solver.py` or the server backend code directly to players.
 
 ---
 
-### Method 2: Automated Deployment via `ctfcli`
+## Solution Walkthrough
 
-If you use `ctfcli` to manage your CTFd instance:
+The application rounds up exchange values to the nearest whole cent when converting the micro-currency `MINI` back to `USD`. To exploit this logic flaw:
 
-1. **Install `ctfcli`**:
-   ```bash
-   pip install ctfcli
-   ctf init
+1. **Locate the Vulnerability**:
+   Analyze the exchange routes in `app.py`. When selling `MINI` back to `USD`, the system uses `math.ceil` to round up:
+   ```python
+   raw_usd = amount / RATES["MINI"]
+   usd_value = math.ceil(raw_usd * 100.0) / 100.0
    ```
-2. **Deploy & Sync Challenge**:
-   The directory already includes [challenge.yml](file:///C:/Users/97695/.gemini/antigravity/scratch/currency_rounding_ctf/challenge.yml). Run:
-   ```bash
-   ctf challenge install .
-   ctf challenge sync .
-   ```
-
----
-
-## Environment Setup & Local Testing
-
-### Local Run (Python)
-```bash
-pip install -r requirements.txt
-python app.py
-```
-App will be running at `http://127.0.0.1:5000`.
-
----
-
-## Writeup & Solution Walkthrough
-
-### 1. Identifying the Vulnerability
-Inspecting `app.py` or analyzing exchange behavior reveals how `MINI` currency converts back to `USD`:
-
-```python
-elif from_curr == "MINI":
-    raw_usd = amount / RATES["MINI"]  # RATES["MINI"] = 100.0
-    usd_value = math.ceil(raw_usd * 100.0) / 100.0
-```
-
-Notice:
-- `math.ceil` rounds **up** to the nearest cent ($0.01).
-- Selling `0.001 MINI`:
-  - `raw_usd` = `0.001 / 100` = `0.00001 USD`.
-  - `usd_value` = `math.ceil(0.00001 * 100.0) / 100.0` = **`$0.01 USD`**!
-
-### 2. Execution via Solver
-```bash
-python solver.py http://127.0.0.1:5000
-```
-Output: `🎉 FLAG CAPTURED: VTCH{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}`
+2. **Exploitation**:
+   If we sell a very small fraction (e.g. `0.001 MINI`), the raw USD value is `0.00001`. Due to the ceil rounding policy, the user receives `$0.01 USD`!
+3. **Salami Slicing Attack**:
+   Write a script to automate this transaction loop:
+   * Buy `MINI` using USD.
+   * Sell the purchased `MINI` back in tiny fractional transactions of `0.001 MINI`.
+   * Each fractional transaction profits `$0.01 USD`.
+4. **Acquire the Flag**:
+   Repeat this transaction loop high-frequency style until the USD balance exceeds `$500.00`, then query the `/api/flag` endpoint to claim the flag.
+   
+   For the automated solver script, see [solver.py](solver.py).
