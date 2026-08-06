@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finmob Global Currency Exchange</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">Finmob Exchange <span class="badge">CTF</span></span>
+            </div>
+            <div class="status-pill">
+                <span class="status-dot"></span> System Live
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Wallet Overview -->
+            <section class="card wallet-card">
+                <h2>Asset Balances</h2>
+                <div class="balances-grid">
+                    <div class="balance-item primary">
+                        <span class="currency-label">USD Balance</span>
+                        <span class="balance-value" id="bal-USD">$0.00</span>
+                    </div>
+                    <div class="balance-item">
+                        <span class="currency-label">EUR Balance</span>
+                        <span class="balance-value" id="bal-EUR">€0.00</span>
+                    </div>
+                    <div class="balance-item">
+                        <span class="currency-label">JPY Balance</span>
+                        <span class="balance-value" id="bal-JPY">¥0</span>
+                    </div>
+                    <div class="balance-item highlight">
+                        <span class="currency-label">MINI Balance</span>
+                        <span class="balance-value" id="bal-MINI">0.0000 MINI</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Exchange Interface -->
+            <section class="card exchange-card">
+                <h2>Quick Swap</h2>
+                <form id="exchange-form" onsubmit="handleExchange(event)">
+                    <div class="swap-row">
+                        <div class="input-group">
+                            <label>From</label>
+                            <select id="from-curr" onchange="updateRateDisplay()">
+                                <option value="USD">USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="JPY">JPY (¥)</option>
+                                <option value="MINI">MINI (Micro-Unit)</option>
+                            </select>
+                            <input type="number" id="swap-amount" step="any" min="0.0001" placeholder="Amount" required>
+                        </div>
+
+                        <div class="swap-arrow">⇄</div>
+
+                        <div class="input-group">
+                            <label>To</label>
+                            <select id="to-curr" onchange="updateRateDisplay()">
+                                <option value="MINI">MINI (Micro-Unit)</option>
+                                <option value="USD">USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="JPY">JPY (¥)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="rate-preview" id="rate-preview">
+                        Rate: 1 USD = 100.0 MINI
+                    </div>
+
+                    <div class="action-buttons">
+                        <button type="submit" class="btn btn-primary">Execute Swap</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetWallet()">Reset Wallet</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Flag Target Section -->
+            <section class="card flag-card">
+                <div class="target-info">
+                    <h2>Flag Vault Access</h2>
+                    <p>Unlock the Flag by inflating your USD balance to the target threshold ($500.00 USD).</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="target-progress" style="width: 0%;"></div>
+                    </div>
+                    <span class="progress-text" id="progress-text">$100.00 / $500.00 USD</span>
+                </div>
+                <button class="btn btn-gold" onclick="claimFlag()">Claim Flag 🚩</button>
+                <div class="flag-result hidden" id="flag-box">
+                    <span class="flag-label">FLAG:</span>
+                    <code id="flag-code">test{...}</code>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

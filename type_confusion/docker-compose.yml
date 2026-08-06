@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  apex-exchange:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLAG=test{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}
+      - SECRET_KEY=ctf_prod_secret_key_99823
