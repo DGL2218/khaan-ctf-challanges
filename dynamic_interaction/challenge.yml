@@ -1,0 +1,27 @@
+name: "Dynamic Interaction"
+author: "CTF Creator"
+category: "Networking"
+description: |
+  We have a secure verification gate that requires a dynamic proof of active interaction.
+  Static analysis alone will not solve this. You must write a socket client to complete:
+  1. A fast mathematical Fibonacci puzzle modulo 1,000,000,000 (within 1.0 second).
+  2. A time-sensitive knock (exactly 1.5 seconds later).
+  3. A state-dependent cryptographic hash matching the server's session parameters.
+
+  **Connection**:
+  `nc <challenge-host> 5002`
+
+value: 500
+type: standard
+
+flags:
+  - VTCH{dyn4m1c_t1m1ng_4nd_puzzl3_byp4ss}
+
+tags:
+  - networking
+  - scripting
+  - timing-gate
+  - logic
+
+state: visible
+version: "0.1"

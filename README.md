@@ -13,6 +13,7 @@ This repository contains the official challenges for **KHAAN CTF**. Below is the
 | **Settlement Token** | Web / Cryptography | Medium | Hosted Service (Flask API) | `VTCH{c4n0n1c4l_HMAC_f0rg3d_v1a_spl1t_k3y}` |
 | **Type Confusion** | Web / Logic | Medium | Hosted Service (Docker Web App) | `VTCH{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}` |
 | **Anti-Keylogger Bypass** | System / OS | High | Hosted Service (SSH/FIFO) | `VTCH{bypass_unpr0t3ct3d_fifo_hook}` |
+| **Dynamic Interaction** | Networking | Medium | Hosted Service (Socket Server) | `VTCH{dyn4m1c_t1m1ng_4nd_puzzl3_byp4ss}` |
 
 ---
 
@@ -82,3 +83,14 @@ These challenges require hosting a server or Docker container. Players will conn
      ```
   2. The service exposes SSH port `2222`. Ensure this port is open to players.
   3. Create a **Standard** challenge providing SSH connection details: `ssh ctf@<your-server-ip> -p 2222` (Password: `ctf`).
+
+### D. Dynamic Interaction
+* **Goal**: Solve a 3-stage interactive handshake requiring real-time math computation and a sub-second timing gate.
+* **Deployment**:
+  1. Run the service using Docker Compose:
+     ```bash
+     cd dynamic_interaction
+     docker-compose up -d --build
+     ```
+  2. The service exposes TCP port `5002`. Ensure this port is open to players.
+  3. Create a **Standard** challenge with connection instructions: `nc <your-server-ip> 5002`.
