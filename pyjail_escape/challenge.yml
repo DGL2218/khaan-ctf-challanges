@@ -1,0 +1,25 @@
+name: "Python Jail Escape"
+author: "CTF Creator"
+category: "Misc"
+description: |
+  Welcome to our Secure Python Sandbox! We have restricted all standard file reading, command execution, and import keywords. Commands are also capped at 35 characters.
+  
+  Can you escape the sandbox and read the flag file at `/app/flag.txt`?
+  
+  **Connection**:
+  `nc <challenge-host> 5003`
+
+value: 500
+type: standard
+
+flags:
+  - VTCH{pyth0n_s4ndb0x_3sc4p3_succ3ss}
+
+tags:
+  - misc
+  - python
+  - sandbox-escape
+  - pyjail
+
+state: visible
+version: "0.1"

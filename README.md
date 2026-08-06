@@ -14,6 +14,7 @@ This repository contains the official challenges for **KHAAN CTF**. Below is the
 | **Type Confusion** | Web / Logic | Medium | Hosted Service (Docker Web App) | `VTCH{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}` |
 | **Anti-Keylogger Bypass** | System / OS | High | Hosted Service (SSH/FIFO) | `VTCH{bypass_unpr0t3ct3d_fifo_hook}` |
 | **Dynamic Interaction** | Networking | Medium | Hosted Service (Socket Server) | `VTCH{dyn4m1c_t1m1ng_4nd_puzzl3_byp4ss}` |
+| **Python Jail Escape** | Misc | Medium | Hosted Service (Socket Server) | `VTCH{pyth0n_s4ndb0x_3sc4p3_succ3ss}` |
 
 ---
 
@@ -155,3 +156,25 @@ This repository contains the official challenges for **KHAAN CTF**. Below is the
      docker-compose up -d --build
      ```
   2. Provide players with the connection instruction: `nc <your-server-ip> 5002`.
+
+### E. Python Jail Escape
+* **CTFd Challenge Description**:
+  ```markdown
+  Welcome to our Secure Python Sandbox! We have restricted all standard file reading, command execution, and import keywords. Commands are also capped at 35 characters.
+  
+  Can you escape the sandbox and read the flag file at `/app/flag.txt`?
+  
+  **Connection**:
+  `nc <challenge-host> 5003`
+  ```
+* **CTFd Hints**:
+  * **Hint 1 (Subtle)**: The builtin function `open()` is blacklisted to block simple file reading. However, Python 3 imports use an internal `__loader__` object. Check what methods are available on it.
+  * **Hint 2 (Moderate)**: The loader's `get_data(path)` method can read files directly without using `open()`. However, the code `print(__loader__.get_data("flag.txt"))` is 38 characters long, which is blocked by the 35-character length filter.
+  * **Hint 3 (Direct)**: Since the server maintains your variable states across inputs inside the input loop, you can split your payload into two separate commands: first, save the getter method: `d=__loader__.get_data` (23 chars), then run: `print(d("flag.txt"))` (20 chars).
+* **Deployment & Setup**:
+  1. Spin up the socket server (listens on port `5003`):
+     ```bash
+     cd pyjail_escape
+     docker-compose up -d --build
+     ```
+  2. Provide players with the connection instruction: `nc <your-server-ip> 5003`.
