@@ -12,6 +12,7 @@ This repository contains the official challenges for **KHAAN CTF**. Below is the
 | **Voucher Validator** | Reverse Engineering | Easy (Warm-up) | Static File Download | `VTCH{n0_fr33_ch4rg3_w1th0ut_RE}` |
 | **Settlement Token** | Web / Cryptography | Medium | Hosted Service (Flask API) | `VTCH{c4n0n1c4l_HMAC_f0rg3d_v1a_spl1t_k3y}` |
 | **Type Confusion** | Web / Logic | Medium | Hosted Service (Docker Web App) | `VTCH{s4l4m1_sl1c1ng_num3r1c_typ3_c0nfus10n}` |
+| **Anti-Keylogger Bypass** | System / OS | High | Hosted Service (SSH/FIFO) | `VTCH{bypass_unpr0t3ct3d_fifo_hook}` |
 
 ---
 
@@ -70,3 +71,14 @@ These challenges require hosting a server or Docker container. Players will conn
      *(Alternatively, write a simple Dockerfile for server.py to containerize it).*
   2. The API is hosted on port `5001`. Provide players with the endpoint: `http://<your-server-ip>:5001/settle`.
   3. Provide players with the binary `tokengen` (if distributing) or describe the hashing rules so they can write their own forged signature generators.
+
+### C. Anti-Keylogger Bypass
+* **Goal**: Sniff credentials by targeting an unprotected FIFO communication path to bypass key-hooking monitors.
+* **Deployment**:
+  1. Run the service using Docker Compose:
+     ```bash
+     cd anti_keylogger_bypass
+     docker-compose up -d --build
+     ```
+  2. The service exposes SSH port `2222`. Ensure this port is open to players.
+  3. Create a **Standard** challenge providing SSH connection details: `ssh ctf@<your-server-ip> -p 2222` (Password: `ctf`).

@@ -1,0 +1,28 @@
+name: "Anti-Keylogger Bypass"
+author: "CTF Creator"
+category: "System"
+description: |
+  We have gained local access to a target financial workstation. 
+  An automated agent periodically logs in and inputs a transaction PIN (which is the Flag).
+
+  The workstation is equipped with a custom anti-keylogger solution that detects standard debugging/monitoring software and kills unapproved observers.
+
+  Can you find the security gap in the input pipeline and capture the PIN?
+
+  **Access**: Connect via SSH:
+  `ssh ctf@<challenge-host> -p 2222` (Password: `ctf`)
+
+value: 500
+type: standard
+
+flags:
+  - VTCH{bypass_unpr0t3ct3d_fifo_hook}
+
+tags:
+  - system
+  - keylogger
+  - input-redirection
+  - local-privilege
+
+state: visible
+version: "0.1"

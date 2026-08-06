@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  keylogger-bypass:
+    build: .
+    ports:
+      - "2222:22"
+    restart: always
