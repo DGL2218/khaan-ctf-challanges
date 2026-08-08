@@ -1,0 +1,22 @@
+name: "Phantom Transfer"
+author: "CTF Creator"
+category: "Forensics"
+description: |
+  An internal money-transfer microservice communicated over plaintext HTTP. A capture was taken during a window in which one fraudulent transfer slipped through. Find the tampered request and identify where the money was really sent.
+  
+  **Download File**: `transfer_capture.pcapng`
+
+value: 250
+type: standard
+
+flags:
+  - VTCH{base64_h1dd3n_1n_pl41n_h77p}
+
+tags:
+  - forensics
+  - network
+  - http
+  - pcap
+
+state: visible
+version: "0.1"

@@ -15,6 +15,7 @@ This repository contains the official challenges for **KHAAN CTF**. Below is the
 | **Anti-Keylogger Bypass** | System / OS | High | Hosted Service (SSH/FIFO) | `VTCH{bypass_unpr0t3ct3d_fifo_hook}` |
 | **Dynamic Interaction** | Networking | Medium | Hosted Service (Socket Server) | `VTCH{dyn4m1c_t1m1ng_4nd_puzzl3_byp4ss}` |
 | **Python Jail Escape** | Misc | Medium | Hosted Service (Socket Server) | `VTCH{pyth0n_s4ndb0x_3sc4p3_succ3ss}` |
+| **Phantom Transfer** | Forensics | Easy | Static File Download | `VTCH{base64_h1dd3n_1n_pl41n_h77p}` |
 
 ---
 
@@ -66,6 +67,22 @@ This repository contains the official challenges for **KHAAN CTF**. Below is the
      ```
   2. Upload only the compiled `crackme` binary as the challenge file.
   3. **DO NOT** upload `crackme.c`, `build.sh`, or the `solution/` folder.
+
+### C. Phantom Transfer
+* **CTFd Challenge Description**:
+  ```markdown
+  An internal money-transfer microservice communicated over plaintext HTTP. A capture was taken during a window in which one fraudulent transfer slipped through. Find the tampered request and identify where the money was really sent.
+  
+  **Download File**: `transfer_capture.pcapng`
+  ```
+* **CTFd Hints**:
+  * **Hint 1 (Subtle)**: All the transfers look the same—except one. What stands out about the transaction amount?
+  * **Hint 2 (Moderate)**: Filter for `http.request.method == "POST"` in Wireshark. Use "Follow HTTP Stream" on the request with the highest transfer amount to isolate its payload.
+  * **Hint 3 (Direct)**: The payload is base64-encoded inside the POST request body. Base64-decode this string to find the JSON details and the flag.
+* **Deployment & Setup**:
+  1. The capture file `transfer_capture.pcapng` is pre-generated under `phantom_transfer/challenge/`.
+  2. Upload `transfer_capture.pcapng` to your CTFd platform.
+  3. **DO NOT** upload `generate_pcap.py`, the `solution/` folder, or `solve.py`.
 
 ---
 
